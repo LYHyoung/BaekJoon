@@ -1,65 +1,53 @@
-#include<bits/stdc++.h>
+#include <iostream>
+#include <cstdlib>
+#include <vector>
+#include <algorithm>
+#define MAX 101
+#define INF 1e9
 using namespace std;
-typedef long long int ll;
-typedef pair<ll,ll> pii;
- 
-#define ff first
-#define ss second
-#define ep emplace_back
-#define eb emplace
-#define pb push_back
- 
-vector<ll> num;
-ll dis[1010][1010];
-ll arr[101][101];
-ll arr2[1010];
-string s;
-ll inf =1e9+7;
-ll di[4]={0,1,0,-1};
-ll dj[4]={1,0,-1,0};
- 
-int main(){
-    ll i,j,k,l,m,n,t,d;
-    cin>>n>>m>>t>>d;
-    for(i=1;i<=n;i++){
-        cin>>s;
-        for(j=1;j<=m;j++){
-            num.pb(i*m+j);
-            if('a'<=s[j-1]&&s[j-1]<='z')
-                arr[i][j]=s[j-1]-'a'+26;
-            else arr[i][j]=s[j-1]-'A';
-            arr2[i*m+j]=arr[i][j];
-        }
-    }
- 
-    for(i=1;i<=1000;i++)
-        for(j=1;j<=1000;j++)
-            if(i!=j)
-                dis[i][j]=inf;
- 
-    for(i=1;i<=n;i++)
-        for(j=1;j<=m;j++)    
-                for(ll x=0;x<=4;x++){
-                    k=i+di[x];
-                    l=j+dj[x];
-                    if(k<1||l<1||k>n||l>m) continue;
-                    ll a=i*m+j;
-                    ll b=k*m+l;
-                    if(abs(arr[i][j]-arr[k][l])>t) continue;
-                    if(arr[i][j]>=arr[k][l]) dis[a][b]=1;
-                    else dis[a][b]=(arr[i][j]-arr[k][l])*(arr[i][j]-arr[k][l]);
-                }
- 
-    for(auto k:num)
-        for(auto i:num)
-            for(auto j:num)
-                if(dis[i][k]+dis[k][j]<dis[i][j])
-                    dis[i][j]=dis[i][k]+dis[k][j];
- 
-    ll ans=0;
-    for(auto k:num){
-        //cout<<k<<' '<<dis[m+1][k]<<' '<<dis[k][m+1]<<'\n';
-        if(dis[m+1][k]+dis[k][m+1]<=d) ans=max(ans,arr2[k]);
-    }
-    cout<<ans;
+vector<int> num;
+int map[MAX][MAX];
+int map2[1010];
+int cost[1010][1010];
+int main() {
+	ios_base::sync_with_stdio(0); cin.tie(0); cout.tie(0);
+	int N, M, T, D; cin >> N >> M >> T >> D;
+	int dx[4] = { -1,1,0,0 }, dy[4] = { 0,0,-1,1 };
+	for (int i = 1; i <= N; i++) {
+		string line; cin >> line;
+		for (int j = 1; j <= M; j++) {
+			num.push_back(i * M + j);
+			if (line[j - 1] >= 'A' && line[j - 1] <= 'Z')
+				map[i][j] = line[j - 1] - 'A';
+			else
+				map[i][j] = line[j - 1] - 'a' + 26;
+			map2[i * M + j] = map[i][j];
+		}
+	}
+	for (int i = 1; i <= 1000; i++)
+		for (int j = 1; j <= 1000; j++)
+			if (i != j)
+				cost[i][j] = INF;
+	for (int i = 1; i <= N; i++)
+		for (int j = 1; j <= M; j++)
+			for (int k = 0; k < 4; k++) {
+				int nx = i + dx[k], ny = j + dy[k];
+				if (nx < 1 || ny < 1 || nx > N || ny > N) continue;
+				int s = i * M + j, e = nx * M + ny;
+				if (abs(map[i][j] - map[nx][ny]) > T) continue;
+				if (map[i][j] >= map[nx][ny]) cost[s][e] = 1;
+				else cost[s][e] = (map[i][j] - map[nx][ny]) * (map[i][j] - map[nx][ny]);
+			}
+	for (auto k : num)
+		for (auto i : num)
+			for (auto j : num)
+				if (cost[i][j] > cost[i][k] + cost[k][j])
+					cost[i][j] = cost[i][k] + cost[k][j];
+	int ans = 0;
+	for (auto k : num) {
+		if (cost[M+1][k] + cost[k][M+1] <= D)
+			ans = max(ans, map2[k]);
+	}
+	cout << ans;
+	return 0;
 }
