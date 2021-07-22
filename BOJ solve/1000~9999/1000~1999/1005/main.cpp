@@ -1,53 +1,29 @@
 #include <iostream>
-#include <vector>
-#include <queue>
-#include <algorithm>
-#define MAX 1001
-
-using namespace std;
-
-int N, K;
-
+ 
 int main() {
-	ios_base::sync_with_stdio(0); cin.tie(0); cout.tie(0);
-
-	int Tc; cin >> Tc;
-
-	while (Tc--) {
-		cin >> N >> K;
-		int time[MAX];
-		int build[MAX] = { 0 };
-		vector<int> v[MAX];
-		
-		for (int i = 1; i <= N; i++) {
-			cin >> time[i];
-		}
-		
-		for (int i = 0; i < K; i++) {
-			int s, e; cin >> s >> e;
-			v[s].push_back(e);
-			build[e]++;
-		}
-
-		int D; cin >> D;
-
-		int result[MAX] = { 0 };
-		queue<int> q;
-		for (int i = 1; i <= N; i++)			// input index that don't have starting data
-			if (!build[i]) q.push(i);
-
-		while (build[D] > 0) {
-			int cur = q.front();
-			q.pop();
-
-			for (int next : v[cur]) {
-				result[next] = max(result[next], result[cur] + time[cur]);
-				if (--build[next] == 0) q.push(next);
-			}
-		}
-
-		cout << result[D] + time[D] << '\n';
-	}
-
-	return 0;
+    int T;
+    scanf("%d", &T);
+ 
+    for (int i = 0; i < T; ++i) {
+        int x1, y1, x2, y2;
+        scanf("%d %d %d %d", &x1, &y1, &x2, &y2);
+ 
+        int n;
+        scanf("%d", &n);
+        int count = 0;
+        for (int j = 0; j < n; ++j) {
+            int cx, cy, r, d;
+            bool in1, in2;
+ 
+            scanf("%d %d %d", &cx, &cy, &r);
+            d = (cx - x1) * (cx - x1) + (cy - y1) * (cy - y1);
+            in1 = d > r * r ? false : true;
+            d = (cx - x2) * (cx - x2) + (cy - y2) * (cy - y2);
+            in2 = d > r * r ? false : true;
+            if (in1 != in2) count++;
+        }
+        printf("%d\n", count);
+    }
+ 
+    return 0;
 }
