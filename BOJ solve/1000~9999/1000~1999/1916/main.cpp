@@ -18,6 +18,8 @@ void DIJK(int start) {
 		int cur = pq.top().second;
 		pq.pop();
 
+		if (dist[cur] < cost) continue;
+
 		for (int i = 0; i < v[cur].size(); i++) {
 			int nextcur = v[cur][i].second;
 			int nextcost = v[cur][i].first;
