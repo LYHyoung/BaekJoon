@@ -4,15 +4,18 @@
 #define INF 1e9
 using namespace std;
 
-int m, n;
+int n, m;
 int d[26][26];
 string s;
 char fr, to;
 
-//ÇÃ·ÎÀÌµå ¿Í¼£·Î Á¤ÀÇ, k¹øÂ° Á¤Á¡À» °ÅÃÄ °¡¸é °¡°íÀÚ ÇÏ´Â Á¡¿¡ µµÂøÇÒ ¼ö ÀÖ´ÂÁö ÆÇº°
+//í”Œë¡œì´ë“œ ì™€ìƒ¬
 void floydWashall() {
+	// k : ê±°ì³ê°€ëŠ” ë…¸ë“œ
 	for (int k = 0; k < 26; k++)
+		// ì¶œë°œ
 		for (int i = 0; i < 26; i++)
+			// ë„ì°©
 			for (int j = 0; j < 26; j++)
 				if (d[i][j] == INT32_MAX && d[i][k] != INT32_MAX && d[k][j] != INT32_MAX)
 					d[i][j] = d[i][k] + d[k][j];
@@ -27,7 +30,7 @@ int main() {
 
 	while (n--) {
 		cin >> fr >> s >> to;
-		d[fr - 'a'][to - 'a'] = 1; //frÀº toÀÌ´Ù¸¦ Ç¥Çö
+		d[fr - 'a'][to - 'a'] = 1; //frì€ toì´ë‹¤ë¥¼ í‘œí˜„
 	}
 
 	floydWashall();
@@ -36,9 +39,9 @@ int main() {
 
 	while (m--) {
 		cin >> fr >> s >> to;
-		if (d[fr - 'a'][to - 'a'] != INT32_MAX) //frÀº toÀÌ´Ù¸¦ Á¤ÀÇÇÒ ¼ö ÀÖÀ¸¸é
+		if (d[fr - 'a'][to - 'a'] != INT32_MAX) //frì€ toì´ë‹¤ë¥¼ ì •ì˜í•  ìˆ˜ ìˆìœ¼ë©´
 			cout << "T" << '\n';
-		else //frÀº toÀÌ´Ù¸¦ Á¤ÀÇÇÒ ¼ö ¾øÀ¸¸é
+		else //frì€ toì´ë‹¤ë¥¼ ì •ì˜í•  ìˆ˜ ì—†ìœ¼ë©´
 			cout << "F" << "\n";
 	}
 	return 0;
